@@ -25,5 +25,5 @@ http.get(url, res => {
 
 // short delay before sending ready to allow for the request to arrive
 setTimeout(() => {
-	process.send("ready");
+	process.send("done");
 }, 1000);

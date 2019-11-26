@@ -17,8 +17,8 @@ server
 			fork('client.js', { env:{ LOGNAME: "[CLIENT]" }})
 				.on('exit', logExit.bind(null, "client"))
 				.on('message', msg => {
-					if (msg == "ready") {
-						log.out('client is ready. Killing server');
+					if (msg == "done") {
+						log.out('client is done. Killing server');
 						server.kill('SIGTERM');
 					}
 				});

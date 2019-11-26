@@ -1,0 +1,27 @@
+{
+  "name": "graceful-exit-nodejs",
+  "version": "1.0.0",
+  "description": "Investigating graceful exit for a nodejs http server",
+  "main": "index.js",
+  "scripts": {
+    "single-client": "HANDLER_LATENCY=5000 GRACEPERIOD=7000 node single-client.js",
+		"multiple-clients": "HANDLER_LATENCY=3000 GRACEPERIOD=7000 node multiple-clients.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karlpokus/graceful-exit-nodejs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karlpokus/graceful-exit-nodejs/issues"
+  },
+  "homepage": "https://github.com/karlpokus/graceful-exit-nodejs#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "http-graceful-shutdown": "^2.3.2",
+    "koa": "^2.11.0",
+    "koa-router": "^7.4.0"
+  }
+}

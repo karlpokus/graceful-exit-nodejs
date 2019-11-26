@@ -5,9 +5,17 @@ We want a graceful exit to
 1. stop accepting requests by closing the http listener
 2. wait for pending connections to finish until graceperiod is up
 
-note: All tests can be run with the opt `DEBUG=http-graceful-shutdown` for verbose output.
+We're gonna test this by running a parent process that forks a http server and 1+ http clients. The number of clients depending on the test case. Forking allows for easy orchestration and also passing arbitrary data between parent och child via ipc channels.
 
-# test 1
+So the parent will start a http server, and when the server is listening, the parent will start 1+ http clients that will call the server and finally the parent will signal the server to exit (by sending sigint or sigterm). At this point we expect some http calls to succeed and some to fail - depending on the latency of the request and graceperiod.
+
+note: all tests can be run with the opttional flag `DEBUG=http-graceful-shutdown` for verbose output.
+
+# tests
+
+case 1 - single client pending
+
+- graceperiod > request latency
 - parent starts server and client
 - client makes request to server
 - parent sigterms server
@@ -17,7 +25,9 @@ note: All tests can be run with the opt `DEBUG=http-graceful-shutdown` for verbo
 $ npm run single-client
 ```
 
-# test 2
+case 2 - clients refused post sigterm
+
+- graceperiod > request latency
 - parent starts server and client 1
 - client 1 makes request to server
 - parent sigterms server
@@ -28,6 +38,21 @@ $ npm run single-client
 $ npm run multiple-clients
 ```
 
+case 3 - graceperiod up
+
+- graceperiod < request latency
+- parent starts server and client
+- client makes request to server
+- parent sigterms server
+- expect: server ends pending connection (socket hang up)
+
+```bash
+$ npm run timeout
+```
+
+# todo
+- [ ] handle pending db calls
+- [ ] server cleanup starts only after response sent
 
 # license
 MIT

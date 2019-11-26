@@ -1,6 +1,6 @@
 const Log = require('./log.js');
 const http = require('http');
-const log = new Log("[CLIENT]");
+const log = new Log(process.env.LOGNAME);
 
 process.send = (process.send)? process.send : console.log;
 

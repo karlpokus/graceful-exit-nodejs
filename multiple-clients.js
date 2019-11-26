@@ -14,14 +14,14 @@ server
 	.on('message', msg => {
 		if (msg == "ready") {
 			log.out('server is ready. Starting client-01');
-			fork('client.js')
+			fork('client.js', { env:{ LOGNAME: "[CLI-01]" }})
 				.on('exit', logExit.bind(null, "client-01"))
 				.on('message', msg => {
 					if (msg == "ready") {
 						log.out('client-01 is ready. Killing server and starting client-02');
 						server.kill('SIGTERM');
 
-						fork('client.js')
+						fork('client.js', { env:{ LOGNAME: "[CLI-02]" }})
 							.on('exit', logExit.bind(null, "client-02"))
 							// ignore msg from client-02
 

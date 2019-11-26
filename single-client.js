@@ -14,7 +14,7 @@ server
 	.on('message', msg => {
 		if (msg == "ready") {
 			log.out('server is ready. Starting client');
-			fork('client.js')
+			fork('client.js', { env:{ LOGNAME: "[CLIENT]" }})
 				.on('exit', logExit.bind(null, "client"))
 				.on('message', msg => {
 					if (msg == "ready") {

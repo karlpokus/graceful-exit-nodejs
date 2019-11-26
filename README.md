@@ -22,9 +22,11 @@ $ npm run single-client
 - client 1 makes request to server
 - parent sigterms server
 - client 2 makes request to server
-- expect: server waits on pending connection but does not accept the second
+- expect: server waits on pending connection from client 1 but does not accept client 2
 
-..not done
+```bash
+$ npm run multiple-clients
+```
 
 
 # license

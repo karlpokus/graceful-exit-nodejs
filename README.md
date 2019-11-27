@@ -9,11 +9,10 @@ We're gonna test this by running a parent process that forks a http server and 1
 
 So the parent will start a http server, and when the server is listening, the parent will start 1+ http clients that will call the server and finally the parent will signal the server to exit (by sending sigint or sigterm that the process can catch). At this point we expect some http calls to succeed and some to fail - depending on the latency of the request and graceperiod. When the graceperiod is up there will be a forced termination of any pending requests - the equivalent of an orchestrator like k8s sending an (uncatchable) sigkill.
 
-note: all tests can be run with the optional flag `DEBUG=http-graceful-shutdown` for more verbose output.
+All tests can be run with the optional flag `DEBUG=http-graceful-shutdown` for more verbose output.
 
-# tests
-
-case 1 - single client pending
+# case 1
+single client pending
 
 - graceperiod > request latency
 - parent starts server and client
@@ -25,7 +24,17 @@ case 1 - single client pending
 $ npm run single-client
 ```
 
-case 2 - clients refused post sigterm
+```yml
+parent |------------------------------0
+server     |-----------x-----------0
+client          |-------------0
+request           |---------|
+graceperiod            |-----------|
+cleanup                     |------|
+```
+
+# case 2
+clients refused post sigterm
 
 - graceperiod > request latency
 - parent starts server and client 1
@@ -38,7 +47,19 @@ case 2 - clients refused post sigterm
 $ npm run multiple-clients
 ```
 
-case 3 - graceperiod up
+```yml
+parent       |------------------------------0
+server           |----------x-----------0
+client-01            |-------------0
+request-01             |---------|
+client-02                   |------1
+request-02                    |--X
+graceperiod                 |-----------|
+cleanup                          |------|
+```
+
+# case 3
+graceperiod up
 
 - graceperiod < request latency
 - parent starts server and client
@@ -48,6 +69,14 @@ case 3 - graceperiod up
 
 ```bash
 $ npm run timeout
+```
+
+```yml
+parent       |------------------------------0
+server           |----------x-----------1
+client               |-------------1
+request                |---------X
+graceperiod                 |----|
 ```
 
 # todo

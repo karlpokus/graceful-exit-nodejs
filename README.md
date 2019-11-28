@@ -9,6 +9,12 @@ We're gonna test this by running a parent process that forks a http server and 1
 
 So the parent will start a http server, and when the server is listening, the parent will start 1+ http clients that will call the server and finally the parent will signal the server to exit (by sending sigint or sigterm that the process can catch). At this point we expect some http calls to succeed and some to fail - depending on the latency of the request and graceperiod. When the graceperiod is up there will be a forced termination of any pending requests - the equivalent of an orchestrator like k8s sending an (uncatchable) sigkill.
 
+# install
+Install deps to run the tests
+
+```bash
+$ npm install
+```
 All tests can be run with the optional flag `DEBUG=http-graceful-shutdown` for more verbose output.
 
 # case 1

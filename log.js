@@ -8,10 +8,10 @@ function fmt(x) {
 
 function Logger(caller) {
 	this.caller = caller;
-	this.out = msg => {
+	this.out = (...msg) => {
 		const d = new Date();
 		const ts = `${ fmt(d.getHours()) }:${ fmt(d.getMinutes()) }:${ fmt(d.getSeconds()) }`;
-		console.log(`${ this.caller } ${ ts } ${ msg }`);
+		console.log(`${ this.caller } ${ ts } ${ msg.join(" ") }`);
 	}
 }
 

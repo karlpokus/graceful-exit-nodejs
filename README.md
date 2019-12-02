@@ -15,7 +15,11 @@ Install deps to run the tests
 ```bash
 $ npm install
 ```
-All tests can be run with the optional flag `DEBUG=http-graceful-shutdown` for more verbose output.
+
+Optional test flags
+- print outgoing and incoming headers with HEADERS=1
+- run cleanup with CLEANUP=1
+- tests on branch `graceful-shutdown-lib` can use the optional flag `DEBUG=http-graceful-shutdown` for more verbose output
 
 # case 1
 single client pending
@@ -85,12 +89,36 @@ request                |---------X
 graceperiod                 |----|
 ```
 
+# case 4
+keep-alive
+
+- graceperiod > request latency
+- parent starts server and keep-alive-client
+- keep-alive-client makes 1st request to server and gets a response
+- parent sigterms server
+- keep-alive-client makes 2nd request to server
+- expect: server accepts 2nd request because of keep-alive even though it's closed
+
+```bash
+$ npm run keep-alive
+```
+
+```yml
+parent       |--------------------------------0
+server           |------------x-----------0
+client               |---------------0
+request-01               |--|
+request-02                      |--|
+graceperiod                   |-----------|
+```
+
 # todo
 - [ ] handle pending db calls
 - [ ] server cleanup starts only after response sent
 - [x] remove graceful-lib
 - [x] opt to run stand-alone children
 - [ ] automate asserting test passing
+- [x] add keep-alive test
 
 # license
 MIT

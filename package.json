@@ -6,7 +6,8 @@
   "scripts": {
     "single-client": "HANDLER_LATENCY=5000 GRACEPERIOD=7000 node single-client.js",
     "multiple-clients": "HANDLER_LATENCY=3000 GRACEPERIOD=7000 node multiple-clients.js",
-    "timeout": "HANDLER_LATENCY=5000 GRACEPERIOD=3000 node single-client.js"
+    "timeout": "CLEANUP=1 HANDLER_LATENCY=5000 GRACEPERIOD=3000 node single-client.js",
+		"keep-alive": "HEADERS=1 HANDLER_LATENCY=3000 GRACEPERIOD=5000 node keep-alive.js"
   },
   "repository": {
     "type": "git",

@@ -2,7 +2,7 @@ const Log = require('./log.js');
 const http = require('http');
 const log = new Log(process.env.LOGNAME);
 
-process.send = (process.send)? process.send : console.log;
+process.send = (process.send)? process.send : log.out;
 
 const url = 'http://localhost:9012/hi/cf';
 

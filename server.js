@@ -9,7 +9,9 @@ const port = "9012";
 const log = new Log("[SERVER]");
 
 const foo = ctx => { // simulate slow client
-	log.out('got request');
+	if (process.env.HEADERS == "1") {
+		log.out('request headers', JSON.stringify(ctx.headers, null, 2));
+	}
 	return setTimeout(() => {
 		log.out('reply to request');
 		ctx.res.end(`hi ${ ctx.params.user }`);
@@ -38,11 +40,13 @@ server = app.listen(port, host, () => {
 ['SIGINT', 'SIGTERM'].forEach(sig => {
 	process.on(sig, () => {
 		log.out('got', sig);
-		log.out('cleanup start');
-		setTimeout(() => {
-			log.out('cleanup end. Exiting');
-			process.exit(0);
-		}, process.env.GRACEPERIOD);
+		if (process.env.CLEANUP == "1") {
+			log.out('cleanup start');
+			setTimeout(() => {
+				log.out('cleanup end. Exiting');
+				process.exit(0);
+			}, process.env.GRACEPERIOD);
+		}
 		server.close(err => {
 			log.out('listening', server.listening);
 			if (err) {

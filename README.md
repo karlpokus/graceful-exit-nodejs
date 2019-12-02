@@ -88,6 +88,9 @@ graceperiod                 |----|
 # todo
 - [ ] handle pending db calls
 - [ ] server cleanup starts only after response sent
+- [x] remove graceful-lib
+- [x] opt to run stand-alone children
+- [ ] automate asserting test passing
 
 # license
 MIT
